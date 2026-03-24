@@ -46,9 +46,9 @@ A simple Docker-based file sharing solution that provides both **SMB (Samba)** a
 
 **macOS:**
 ```bash
-# Via Finder: Cmd+K → smb://<server-ip>:2445
+# Via Finder: Cmd+K → smb://samba:secret@<server-ip>:2445/SharedFiles
 # Or via terminal:
-open smb://samba:secret@<server-ip>:2445
+open smb://samba:secret@<server-ip>:2445/SharedFiles
 ```
 
 **Linux:**
