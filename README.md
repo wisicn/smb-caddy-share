@@ -35,8 +35,8 @@ A simple Docker-based file sharing solution that provides both **SMB (Samba)** a
 | `SHARED_DIR` | `./shared` | Host directory to share |
 | `SMB_USER` | `samba` | SMB username |
 | `SMB_PASS` | `secret` | SMB password |
-| `SMB_UID` | `1000` | User ID for file permissions |
-| `SMB_GID` | `1000` | Group ID for file permissions |
+| `PUID` | `1000` | User ID for file permissions (shared by both services) |
+| `PGID` | `1000` | Group ID for file permissions (shared by both services) |
 | `SMB_PORT` | `2445` | SMB port on host |
 | `WEB_PORT` | `18808` | Web server port on host |
 
