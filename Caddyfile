@@ -1,0 +1,12 @@
+{
+    http_port {$CADDY_PORT:80}
+}
+
+http:// {
+    root * {$FILE_ROOT:/srv}
+
+    file_server {
+        browse
+        hide .DS_Store ._.DS_Store ._*
+    }
+}

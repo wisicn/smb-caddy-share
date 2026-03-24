@@ -1,0 +1,22 @@
+# Environment files (contains secrets)
+.env
+
+# Shared directory (user data)
+shared/
+
+# macOS
+.DS_Store
+._*
+
+# Docker volumes (if using local bind mounts)
+caddy_data/
+caddy_config/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log

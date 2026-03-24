@@ -1,0 +1,51 @@
+# Combined Samba + Caddy File Server
+# 
+# Usage:
+#   1. Edit the environment variables below to customize your setup
+#   2. Run: docker compose up -d
+#   3. Access files via:
+#      - SMB: smb://localhost:2445 (or your server IP)
+#      - Web: http://localhost:18808
+#
+# Configuration:
+#   - SHARED_DIR: Host directory to share (default: ./shared)
+#   - SMB_USER: Samba username (default: samba)
+#   - SMB_PASS: Samba password (default: secret)
+#   - SMB_PORT: SMB port on host (default: 2445)
+#   - WEB_PORT: Web server port on host (default: 18808)
+
+services:
+  samba:
+    image: dockurr/samba
+    container_name: samba_server
+    environment:
+      NAME: "SharedFiles"
+      USER: ${SMB_USER:-samba}
+      PASS: ${SMB_PASS:-secret}
+      UID: "1000"
+      GID: "1000"
+    ports:
+      - ${SMB_PORT:-2445}:445
+    volumes:
+      - ${SHARED_DIR:-./shared}:/storage
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy_file_server
+    restart: unless-stopped
+    ports:
+      - ${WEB_PORT:-18808}:80
+    environment:
+      - FILE_ROOT=/srv
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${SHARED_DIR:-./shared}:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - samba
+
+volumes:
+  caddy_data:
+  caddy_config:
