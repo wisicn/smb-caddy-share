@@ -11,6 +11,8 @@
 #   - SHARED_DIR: Host directory to share (default: ./shared)
 #   - SMB_USER: Samba username (default: samba)
 #   - SMB_PASS: Samba password (default: secret)
+#   - SMB_UID: User ID for file permissions (default: 1000)
+#   - SMB_GID: Group ID for file permissions (default: 1000)
 #   - SMB_PORT: SMB port on host (default: 2445)
 #   - WEB_PORT: Web server port on host (default: 18808)
 
@@ -22,8 +24,8 @@ services:
       NAME: "SharedFiles"
       USER: ${SMB_USER:-samba}
       PASS: ${SMB_PASS:-secret}
-      UID: "1000"
-      GID: "1000"
+      UID: ${SMB_UID:-1000}
+      GID: ${SMB_GID:-1000}
     ports:
       - ${SMB_PORT:-2445}:445
     volumes:
