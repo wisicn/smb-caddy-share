@@ -5,6 +5,10 @@
 http:// {
     root * {$FILE_ROOT:/srv}
 
+    basicauth * {
+        {$SMB_USER:samba} {$SMB_PASS_HASH}
+    }
+
     file_server {
         browse
         hide .DS_Store ._.DS_Store ._*

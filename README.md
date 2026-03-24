@@ -5,6 +5,7 @@ A simple Docker-based file sharing solution that provides both **SMB (Samba)** a
 ## Features
 
 - 📁 **Dual Access**: Share files via SMB mount and/or web browser
+- 🔐 **Unified Authentication**: Same credentials for both SMB and Web access
 - 🐳 **One Command Setup**: Single `docker-compose.yml` for all services
 - ⚙️ **Easy Configuration**: Customize via environment variables
 - 🔄 **Persistent Storage**: Data persists across container restarts
@@ -19,12 +20,22 @@ A simple Docker-based file sharing solution that provides both **SMB (Samba)** a
    # Edit .env with your preferred settings
    ```
 
-3. **Start the services**
+3. **Generate password hash for Web Basic Auth**
+   ```bash
+   # Using Docker
+   docker run --rm caddy:latest caddy hash-password --plaintext 'your_password'
+
+   # Or if caddy is installed locally
+   caddy hash-password --plaintext 'your_password'
+   ```
+   Copy the generated hash to `SMB_PASS_HASH` in your `.env` file.
+
+4. **Start the services**
    ```bash
    docker compose up -d
    ```
 
-4. **Access your files**
+5. **Access your files**
    - **SMB**: `smb://<server-ip>:2445`
    - **Web**: `http://<server-ip>:18808`
 
@@ -33,8 +44,9 @@ A simple Docker-based file sharing solution that provides both **SMB (Samba)** a
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `SHARED_DIR` | `./shared` | Host directory to share |
-| `SMB_USER` | `samba` | SMB username |
+| `SMB_USER` | `samba` | SMB/Web username |
 | `SMB_PASS` | `secret` | SMB password |
+| `SMB_PASS_HASH` | *(required)* | Bcrypt hash of password for Web Basic Auth |
 | `PUID` | `1000` | User ID for file permissions (shared by both services) |
 | `PGID` | `1000` | Group ID for file permissions (shared by both services) |
 | `SMB_PORT` | `2445` | SMB port on host |
@@ -64,7 +76,7 @@ sudo mount -t cifs //<server-ip>:2445/SharedFiles /mnt/share \
 
 ### Access via Web Browser
 
-Navigate to `http://<server-ip>:18808` to browse and download files through the web interface.
+Navigate to `http://<server-ip>:18808`. You will be prompted for username and password (same as SMB credentials).
 
 ## Project Structure
 
@@ -92,7 +104,7 @@ docker compose down -v
 ## Security Notes
 
 - Change the default `SMB_PASS` to a strong password
-- Consider adding authentication to the web server if exposing publicly
+- The web interface is protected with Basic Authentication using the same username/password as SMB
 - Both services share the same directory, so changes via SMB are immediately visible via web
 
 ## License
