@@ -42,7 +42,7 @@ services:
     environment:
       - FILE_ROOT=/srv
       - SMB_USER=${SMB_USER:-samba}
-      - SMB_PASS_HASH=${SMB_PASS_HASH}
+      - SMB_PASS_HASH=$SMB_PASS_HASH
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ${SHARED_DIR:-./shared}:/srv
